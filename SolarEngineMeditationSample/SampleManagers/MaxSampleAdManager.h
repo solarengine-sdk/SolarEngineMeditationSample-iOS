@@ -1,0 +1,32 @@
+//
+//  MaxSampleAdManager.h
+//  SolarEngineMeditationSample
+//
+//  Created by zhanghulk on 2025/8/27.
+//
+
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
+NS_ASSUME_NONNULL_BEGIN
+
+// 前向声明
+@class MAInterstitialAd;
+@class MARewardedAd;
+@class MAAdView;
+@class MANativeAdView;
+@class MAAd;
+
+@interface MaxSampleAdManager : NSObject
+
+- (void)initializeSDK;
+- (void)loadInterstitialAd;
+- (void)showInterstitialAdFromViewController:(UIViewController *)viewController;
+- (void)loadRewardedAd;
+- (void)showRewardedAdFromViewController:(UIViewController *)viewController;
+- (void)loadBannerAd;
+- (MAAdView *)getBannerView;
+
+@end
+
+NS_ASSUME_NONNULL_END
