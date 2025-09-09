@@ -30,7 +30,7 @@
 ### 如何在你的应用中使用
 
 1) 按官方文档集成所选聚合 SDK（如 CocoaPods）。
-2) 参考本示例接入各 SDK 的 delegates/blocks。
+2) 参考本示例接入各 SDK 的 delegates/blocks。(您可以从[这里](https://github.com/solarengine-sdk/SolarEngineMeditationSample-iOS/blob/main/Wrappers.zip)下载各聚合平台的wrapper,从中移除您不需要的文件,仅保留您要使用的聚合对应的wrapper文件即可)。
 3) 当触发收益/曝光回调时，调用相应 Wrapper/Tracker 将数据上报到 SolarEngine：
    - AdMob：`paidEventHandler` → 使用 `AdMobAdWrapper` 的 block 设置
      
