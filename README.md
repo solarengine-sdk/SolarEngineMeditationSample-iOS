@@ -14,11 +14,11 @@
 
 ### Key points by network
 
-- AdMob: use paid event (GADAdValue + GADResponseInfo) and forward via `AdMobAdWrapper` which calls `AdMobSolarEngineTracker`.
-- MAX: implement `MAAdRevenueDelegate` per ad type; wrappers (e.g., `MaxRewardedAdWrapper`) call `MaxSolarEngineTracker` with a `MaxAdType` enum.
-- Gromore: extract `BUMRitInfo` via `getShowEcpmInfo`; wrappers call `GromoreSolarEngineTracker` with `GromoreAdType`.
-- IronSource: implement the LevelPlay impression data callback and forward to `IronSourceSolarEngineTracker.trackAdImpression`.
-- Taku/TopOn: use their callback info objects; wrappers call their respective trackers with enums.
+- AdMob: set `paidEventHandler` using `AdMobAdWrapper` helper blocks (e.g., `interstitialAdOnPaidEventBlock:`).
+- MAX: implement `MAAdRevenueDelegate` per ad type and call the matching `Max*AdWrapper` in `didPayRevenueForAd:`.
+- Gromore: on ad show, call `GromoreAdWrapper track*AdImpression` (wrapper extracts `BUMRitInfo` internally).
+- IronSource: use LevelPlay impression data and forward to `IronSourceSolarEngineTracker trackAdImpression`.
+- Taku/TopOn: in show callbacks, call `TakuAdWrapper track*AdRevenue` / `TopOnAdWrapper track*AdRevenue`.
 
 ### Project layout (high‑level)
 
@@ -32,11 +32,55 @@
 1) Integrate the mediation SDK you choose (MAX, AdMob, Gromore, IronSource, Taku, or TopOn) following that SDK’s official iOS guide (e.g., CocoaPods).
 2) Use this sample as a reference for wiring each SDK’s delegates/blocks.
 3) When revenue/impression callbacks fire, call the corresponding wrapper/trackers to forward data to SolarEngine:
-   - AdMob: paid event ➜ `AdMobAdWrapper.*` which calls `AdMobSolarEngineTracker`
-   - MAX: `MAAdRevenueDelegate` ➜ `Max*AdWrapper` which calls `MaxSolarEngineTracker`
-   - Gromore: `getShowEcpmInfo` ➜ `GromoreAdWrapper` which calls `GromoreSolarEngineTracker`
-   - IronSource: LevelPlay impression data ➜ call `IronSourceSolarEngineTracker.trackAdImpression`
+   - AdMob: set paidEventHandler on ads ➜ use `AdMobAdWrapper` helper blocks to forward to `AdMobSolarEngineTracker`
+     
+      Example (Interstitial):
+      ```objc
+      GADResponseInfo *info = self.interstitialAd.responseInfo;
+      // Set paid event listener via wrapper block
+      self.interstitialAd.paidEventHandler = [AdMobAdWrapper interstitialAdOnPaidEventBlock:^(GADAdValue *adValue) {
+          [LogUtils i:@"AdMob Interstitial onAdRevenuePaid"];
+      } responseInfo:info];
+      ```     
+   - MAX: implement `MAAdRevenueDelegate` per ad type and call the respective `Max*AdWrapper`
+     
+     Example (Interstitial):
+     ```objc
+        NSString *adUnitID = [[MaxConfig shared] getAdUnitIdForAdType:AdTypeInterstitial];
+        self.interstitialAd = [[MAInterstitialAd alloc] initWithAdUnitIdentifier: adUnitID];
+        self.interstitialAd.delegate = self;
+        self.interstitialAd.revenueDelegate = [MaxInterstitialAdWrapper adRevenueDelegate:self];             
+     ```
+   - Gromore: obtain `BUMRitInfo` via show eCPM ➜ `GromoreAdWrapper` forwards to `GromoreSolarEngineTracker`
+     
+     Example (Interstitial):
+     ```objc
+      #pragma mark - BUMNativeExpressFullscreenVideoAdDelegate
+
+      - (void)nativeExpressFullscreenVideoAdDidShow:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
+          [LogUtils i:@"Gromore Interstitial ad showed"];
+          
+          // Track ad impression using the new wrapper
+          [GromoreAdWrapper trackInterstitialAdImpression:fullscreenVideoAd];
+      }
+     ```
+   - IronSource: LevelPlay impression data ➜ `IronSourceSolarEngineTracker trackAdImpressionWithData:`
    - Taku/TopOn: callback info ➜ `TakuAdWrapper` / `TopOnAdWrapper` which call their trackers
+   Example (Interstitial):
+    ```objc
+    - (void)didRevenueForPlacementID:(NSString *)placementID
+                           extra:(NSDictionary *)extra{
+      if (*Just for example*/) {
+          [TakuAdWrapper trackInterstitialAdRevenue:placementID extra:extra];
+      }
+
+      if (/*Just for example*/){
+          [TakuAdWrapper trackRewardedAdRevenue:placementID extra:extra];
+      }
+    }
+    ```
+
+
 4) Keep your app code focused on load/show logic; let wrappers normalize and report to SolarEngine.
 
 ### Out of scope
