@@ -30,7 +30,7 @@
 ### How to use in your app
 
 1) Integrate the mediation SDK you choose (MAX, AdMob, Gromore, IronSource, Taku, or TopOn) following that SDK’s official iOS guide (e.g., CocoaPods).
-2) Use this sample as a reference for wiring each SDK’s delegates/blocks.
+2) Use this sample as a reference for wiring each SDK’s delegates/blocks.(You can download the wrapper file from [here](https://github.com/solarengine-sdk/SolarEngineMeditationSample-iOS/blob/main/Wrappers.zip), delete the mediation wrapper file you don`t need). 
 3) When revenue/impression callbacks fire, call the corresponding wrapper/trackers to forward data to SolarEngine:
    - AdMob: set paidEventHandler on ads ➜ use `AdMobAdWrapper` helper blocks to forward to `AdMobSolarEngineTracker`
      
@@ -70,7 +70,7 @@
     ```objc
     - (void)didRevenueForPlacementID:(NSString *)placementID
                            extra:(NSDictionary *)extra{
-      if (*Just for example*/) {
+      if (/*Just for example*/){
           [TakuAdWrapper trackInterstitialAdRevenue:placementID extra:extra];
       }
 
