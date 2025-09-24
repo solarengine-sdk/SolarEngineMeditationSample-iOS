@@ -28,7 +28,7 @@ typedef NS_ENUM(NSInteger, AdMobAdType) {
 
 @interface AdMobSolarEngineTracker : NSObject
 
-+ (void)trackAdImpressionWithAdType:(AdMobAdType)adType adValue:(GADAdValue*)adValue responseInfo:(GADResponseInfo*)responseInfo;
++ (void)trackAdImpressionWithAdType:(AdMobAdType)adType adUnitId:(NSString *)adUnitId adValue:(GADAdValue *)adValue responseInfo:(GADResponseInfo*)responseInfo;
 
 @end
 

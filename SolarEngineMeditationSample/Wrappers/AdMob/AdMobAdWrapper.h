@@ -19,19 +19,19 @@ typedef void(^AdMobOnPaidEventBlock)(GADAdValue *adValue);
 @interface AdMobAdWrapper : NSObject
 
 // Rewarded Ad
-+ (AdMobOnPaidEventBlock)rewardedAdOnPaidEventBlock:(AdMobOnPaidEventBlock)userListener responseInfo:(GADResponseInfo*)responseInfo;
++ (AdMobOnPaidEventBlock)rewardedAdOnPaidEventBlock:(AdMobOnPaidEventBlock)userListener adUnitId:(NSString *)adUnitId  responseInfo:(GADResponseInfo*)responseInfo;
 
 // Interstitial Ad
-+ (AdMobOnPaidEventBlock)interstitialAdOnPaidEventBlock:(AdMobOnPaidEventBlock)userListener responseInfo:(GADResponseInfo*)responseInfo;
++ (AdMobOnPaidEventBlock)interstitialAdOnPaidEventBlock:(AdMobOnPaidEventBlock)userListener adUnitId:(NSString *)adUnitId  responseInfo:(GADResponseInfo*)responseInfo;
 
 // Banner Ad
-+ (AdMobOnPaidEventBlock)bannerAdOnPaidEventBlock:(AdMobOnPaidEventBlock)userListener responseInfo:(GADResponseInfo*)responseInfo;
++ (AdMobOnPaidEventBlock)bannerAdOnPaidEventBlock:(AdMobOnPaidEventBlock)userListener adUnitId:(NSString *)adUnitId  responseInfo:(GADResponseInfo*)responseInfo;
 
 // Native Ad
-+ (AdMobOnPaidEventBlock)nativeAdOnPaidEventBlock:(AdMobOnPaidEventBlock)userListener responseInfo:(GADResponseInfo*)responseInfo;
++ (AdMobOnPaidEventBlock)nativeAdOnPaidEventBlock:(AdMobOnPaidEventBlock)userListener adUnitId:(NSString *)adUnitId  responseInfo:(GADResponseInfo*)responseInfo;
 
 // App Open Ad
-+ (AdMobOnPaidEventBlock)appOpenAdOnPaidEventBlock:(AdMobOnPaidEventBlock)userListener responseInfo:(GADResponseInfo*)responseInfo;
++ (AdMobOnPaidEventBlock)appOpenAdOnPaidEventBlock:(AdMobOnPaidEventBlock)userListener adUnitId:(NSString *)adUnitId  responseInfo:(GADResponseInfo*)responseInfo;
 
 @end
 

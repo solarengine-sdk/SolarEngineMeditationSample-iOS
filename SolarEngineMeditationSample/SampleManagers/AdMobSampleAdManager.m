@@ -60,7 +60,7 @@
         // Set paid event listener
         self.interstitialAd.paidEventHandler = [AdMobAdWrapper interstitialAdOnPaidEventBlock:^(GADAdValue *adValue) {
             [LogUtils i:@"AdMob Interstitial onAdRevenuePaid"];
-        } responseInfo:info];
+        } adUnitId:adUnitID responseInfo:info];
         
         [LogUtils i:@"AdMob Interstitial ad loaded successfully"];
     }];
@@ -97,7 +97,7 @@
         self.rewardedAd.paidEventHandler = [AdMobAdWrapper rewardedAdOnPaidEventBlock:^(GADAdValue *adValue) {
             [LogUtils i:@"AdMob Rewarded onAdRevenuePaid"];
           
-        } responseInfo:info];
+        } adUnitId:ad.adUnitID responseInfo:info];
         
         [LogUtils i:@"AdMob Rewarded ad loaded successfully"];
     }];
@@ -128,7 +128,7 @@
 
     self.bannerView.paidEventHandler = [AdMobAdWrapper bannerAdOnPaidEventBlock:^(GADAdValue *adValue) {
         [LogUtils i:@"AdMob Banner onAdRevenuePaid"];
-    } responseInfo:info];
+    } adUnitId:adUnitID responseInfo:info];
     
     GADRequest *request = [GADRequest request];
     [self.bannerView loadRequest:request];
@@ -169,11 +169,14 @@
     self.nativeAd = nativeAd;
     self.nativeAd.delegate = self;
     
+    
+    NSString *adUnitID = [[AdMobConfig shared] getAdUnitIdForAdType:AdTypeNative];
+
     GADResponseInfo *info = self.nativeAd.responseInfo;
     // Set paid event listener
     self.nativeAd.paidEventHandler = [AdMobAdWrapper nativeAdOnPaidEventBlock:^(GADAdValue *adValue) {
         [LogUtils i:@"AdMob Native onAdRevenuePaid"];
-    } responseInfo:info];
+    } adUnitId:adUnitID responseInfo:info];
 }
 
 - (void)adLoader:(GADAdLoader *)adLoader didFailToReceiveAdWithError:(NSError *)error {

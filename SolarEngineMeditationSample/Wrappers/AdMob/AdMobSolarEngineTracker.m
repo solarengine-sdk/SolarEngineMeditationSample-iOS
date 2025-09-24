@@ -10,7 +10,7 @@
 
 @implementation AdMobSolarEngineTracker
 
-+ (void)trackAdImpressionWithAdType:(AdMobAdType)adType adValue:(GADAdValue *)adValue responseInfo:(GADResponseInfo*)responseInfo{
++ (void)trackAdImpressionWithAdType:(AdMobAdType)adType adUnitId:(NSString *)adUnitId adValue:(GADAdValue *)adValue responseInfo:(GADResponseInfo*)responseInfo{
     [AdMobLogUtils i:[NSString stringWithFormat:@"AdMobSolarEngineTracker.trackAdImpressionWithAdType: %ld, adValue: %@", (long)adType, adValue]];
 
     // Extract the impression-level ad revenue data.
@@ -19,14 +19,13 @@
 
     GADAdNetworkResponseInfo *adNetworkResponseInfo = responseInfo.loadedAdNetworkResponseInfo;
     NSString *adSourceName = adNetworkResponseInfo.adSourceName;
-    NSString *adSourceInstanceID = adNetworkResponseInfo.adSourceInstanceID;
 
     
     SEAdImpressionEventAttribute *attribute = [[SEAdImpressionEventAttribute alloc] init];
     attribute.adNetworkPlatform = adSourceName;
     attribute.adType = (int)adType;
     attribute.adNetworkAppID = @"";
-    attribute.adNetworkPlacementID = adSourceInstanceID;
+    attribute.adNetworkPlacementID = adUnitId;
     attribute.mediationPlatform = @"Admob";
     attribute.currency = currencyCode;
     attribute.ecpm = value.doubleValue / 1000.0;
